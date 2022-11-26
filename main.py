@@ -1,3 +1,4 @@
+#%%
 import sandpileClass
 import numpy as np
 from matplotlib import pyplot as plt
@@ -6,22 +7,21 @@ import time
 #%%
 # Set up piles
 sandpiles = {}
-simSteps = 50000
-sandpiles['small'] = sandpileClass.sandpile(50, simSteps)
-sandpiles['med'] = sandpileClass.sandpile(100, simSteps)
-#sandpiles['large'] = sandpileClass.sandpile(300, simSteps)
+simSteps = 30000
+sandpiles['small'] = sandpileClass.sandpile(15, simSteps)
+sandpiles['med'] = sandpileClass.sandpile(40, simSteps)
 
 #%%
 # Main loop
 
 for size in sandpiles.keys():
     step = 0
-    print 'Working on {} pile'.format(size)
+    print('Working on pile: ' + str(size))
     
     while step < sandpiles[size].simSteps:
         
-        sandpiles[size].addSand(1, sandpiles[size].numEdgePoints/2, 
-                                sandpiles[size].numEdgePoints/2)
+        sandpiles[size].addSand(1, int(sandpiles[size].numEdgePoints/2), 
+                                   int(sandpiles[size].numEdgePoints/2))
     
         start = time.time()
         if sandpiles[size].anyHigherThanThreshold(): 
@@ -41,9 +41,9 @@ for size in sandpiles.keys():
         step += 1  
         
         if step % 500 == 0:
-            print '{}% complete'.format(100.0*(step/float(sandpiles[size].simSteps)))
-            print 'Elapsed time for last 500 steps: {}'.format(np.sum(sandpiles[size].avalancheTime
-                                                               [step - 500:step]))
+            print ('{:.0f} percent complete'.format(100.0*(step/float(sandpiles[size].simSteps))))
+            print ('Elapsed time for last 500 steps: {:.2f}'.format(np.sum(sandpiles[size].avalancheTime
+                                                               [step - 500:step])))
             
     sandpiles[size].hist = (np.histogram(sandpiles[size].avalancheHistory
                             [sandpiles[size].avalancheHistory > 0], 50))
@@ -63,9 +63,3 @@ for size in sandpiles.keys():
     plt.plot(np.arange(0,sandpiles[size].simSteps, 1), 
              sandpiles[size].avalancheHistory, label = size)
     plt.legend()
-    
-    
-
-
-
-    
